@@ -1,0 +1,72 @@
+ESERCIZIO 3: 
+prendo un numero, cerco il . (cosi spartisco parte intera e decimale) e converto. infine sommo
+Per la seconda parte passo come parametro la stringa alfabeto in modo che ogni volta lui va a cercare il "peso" del singolo carattere
+e una volta trovato moltiplica quel carattere per il peso P della base (n. di caratteri) e poi delega il resto ai successivi stati.
+
+ESERCIZIO 7:
+per l'ultimo punto, prende una lista non ordinata e si prende il primo elemento e crea una nuova lista ordinata con quell'elemento.
+Successivamente gli passa la parte restante della lista e ogni volta va ad inserire in maniera ordinata per ogni elemento della lista disordinata.
+
+ESERCIZIO 8: (Hanoi)
+Per definire lo stato del gioco, associa ad ogni paletto il nr. di dischi (palo nr. nr.dischi) e in base ai vari casi base assegna a ciascuna delle liste(dei paletti) il corrispettivo nr. di dischi.
+Nei casi non base suddivide il problema in base a dove si trova il disco piu' grande e richiama la funzione ricorsivamente passando la lista di destinazione/sorgente incrementata di un disco.
+Per la parte grafica e' lo stesso procedimento, soltanto che per ogni caso del cond usa la funzione hanoi-picture-rec per disegnare i dischi e una volta che ha finito (non rimangono dischi da disegnare 
+--> rem-disk ==0) allora ritorna l'immagine disegnata.
+
+ESERCIZIO 9: 
+parte 2: ci sono tre funzioni: f,g,h che hanno una struttura simile e poi la funzione H la scrivi dalla descrizione che ti da il prof. --> se n=0 allora per ogni tipo di funzione che passi come parametro
+	 h(m,0) = f(m); mentre se n!=0 h(m,n) = g(m,h(m,n-1))
+
+ESERCIZIO 11: 
+Il # di modi in cui si puo' completare la disposizione di una scacchiera b parzialmente configurata.
+Se gia' k regine sono state collocate nelle prime k righe, allora mi posizione alla riga k+1 e scorro tutta la colonna finche non trovo una cella disponibile
+(0 <= k < n)
+
+underAttack(i,j) -> usa una procedura ricorsiva di supporto, passo le varie liste che contengono righe,colonne e diagonali minacciate dalle regine
+e faccio il controllo se le posizioni (i o j) sono presenti in almeno una delle liste -->se SI allora e' minacciata -> true
+											 NO allora non e' minacciata -> false								
+
+ESERCIZIO 12: 
+parte 1: Utilizza la logica dell'es 11 soltanto che per rappresentare le righe/colonne/diag minacciate usa le LISTE GENERICHE TIPIZZATE	
+	 ListOfAllCompletions: al posto che incrementare un counter, ritorna una lista contenente (oggetti board) tutte le scacchiere possibili usando l'oggetto board
+parte 2: Si crea la lista di tutte le configurazioni (ListOfAllCompletions) e ne prende una ad una e la stampa a schermo con il metodo setQueens().
+	 In pratica setQueens(string c) riceve come parametro la stringa della configurazione di una singola board (ho una lista di boards) e la stampa. 
+
+ESERCIZIO 13:
+parte 1: applica la tecnica di memoization top-down all'algoritmo dato..meccanico -> uso una matrice di interi che tiene la lunghezza piu lunga progressiva
+parte 2: stesso principio della parte 1, soltanto che utilizza una matrice di IntSList perche ora vuole anche sapere la lista piu lunga (oltre che alla lunghezza)
+parte 3: conta quante cellette [i,j] della matrice vengono effettivamente utilizzate e con un counter salva il tutto in [0,0]..
+	 alla fine ne utilizza l*(l+1)/2 perche' la ricorsione segue una struttura piramidale
+
+ESERCIZIO 14:
+Huffman: freqHistogram(String src) -> si crea un vettore dove per ogni carattere si salva quante volte compare
+	 huffmanTree(int[] f) -> in base al vettore delle frequenze e alla priorityQueue si crea l'albero
+	 codeTable(Node root) -> dopo aver costruito l'albero, si crea la codifica per ogni singolo carattere (es. A-> 001)
+	 flattenTree(Node n) -> codifica l'albero (non i singoli caratteri, bensi le gerarchie tra essi) e quindi i caratteri sono rappresentati appunto dal loro carattere
+	 restoreTree()-> leggo un carattere, se e' un nodo non foglia (@) allora calcolo ricorsivamente PRIMA nodo sx e POI nodo dx (per ognuno mi sposto avanti di 1 nella stringa) 
+			 e poi ritorno un nuovo nodo con i due calcolati prima (nodo padre) se e' un nodo foglia allora mi creo un nodo con il carattere c e peso 0 e lo ritorno.
+
+
+parte 1: generare un file di testo dove stampi per ogni carattere la sua codifica,lunghezza e quante volte compare
+parte 2: generare un file di testo casuale contenente n caratteri e confrontare con il file che e' venuto fuori nel 1	 
+parte 3: dei due file genero le table e mi dicono per ogni carattere la lunghezza e il #bit totali
+	 dimensione: #occorrenze * lunghezza del codice		
+	 dimensione in byte: divido per 7
+
+<     /  \:6+6=12 >
+ *  / \   T
+ * / \  C
+ * G  A
+ * Diventa
+ * @@@GACT
+ * 
+ * Per chiarezza:
+ * {@[@(@GA)C]T}
+A 001    (sinistra, sinistra, destra)
+	
+
+ESERCIZIO 15:
+parte 1: NodeQueue che sostituisce la PriorityQueue, quando vado a rimuovere il nodo minore devo prima cercare la sua posizione (i), poi shifto tutto a sx di 1 dalla posiz i+1	e riduco di 1 la dimensione dell'array
+	 per Add() se la dimensione max e' gia stata raggiunta allora incremento la dimensione usando un array di supporto, altrimenti inserisco normalmente.
+parte 2: Analogo a parte 1, peek e pop funzionano alla stessa maniera. Push() va ad aggiungere in posiz [size-1] e incrementa prima la sua size e vede se sfora il limite max --> size e' dimensione temporanea, max size e' dimensione del vettore originale	
+	   
