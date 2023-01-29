@@ -1,0 +1,97 @@
+<machine>
+	<io_machine>false</io_machine>
+	<tapes_number>1</tapes_number>
+	<alphabet>
+		<blank>_</blank>
+		<symbols>01</symbols>
+	</alphabet>
+	<states>
+		<state>
+			<name>q0</name>
+			<initial>true</initial>
+			<final>false</final>
+			<description>Stato iniziale</description>
+		</state>
+		<state>
+			<name>q1</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Inizio a scorrere a dx</description>
+		</state>
+		<state>
+			<name>q2</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Ok ora sono arrivato in fondo, scorro verso sx per sommare</description>
+		</state>
+		<state>
+			<name>halt</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>no</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>q3</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description>Ho sommato, ora devo tornare all'inizio</description>
+		</state>
+		<state>
+			<name>yes</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+	</states>
+	<instructions>
+		<instruction>
+			<value>q0 _ -> q1 _ R</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q1 _ -> q2 _ L</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q1 0 -> q1 0 R</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q1 1 -> q1 1 R</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q2 0 -> q3 1 L</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q2 1 -> q2 0 L</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q2 _ -> q3 1 L</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q3 _ -> halt _ S</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q3 0 -> q3 0 L</value>
+			<description></description>
+		</instruction>
+		<instruction>
+			<value>q3 1 -> q3 1 L</value>
+			<description></description>
+		</instruction>
+	</instructions>
+	<tapes>
+		<tape>_1000_</tape>
+	</tapes>
+</machine>

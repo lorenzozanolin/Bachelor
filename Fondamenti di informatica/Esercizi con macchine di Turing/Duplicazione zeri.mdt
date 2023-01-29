@@ -1,0 +1,113 @@
+<machine>
+	<io_machine>false</io_machine>
+	<tapes_number>1</tapes_number>
+	<alphabet>
+		<blank>_</blank>
+		<symbols>0</symbols>
+	</alphabet>
+	<states>
+		<state>
+			<name>q0</name>
+			<initial>true</initial>
+			<final>false</final>
+			<description>Initial state</description>
+		</state>
+		<state>
+			<name>no</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>yes</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>halt</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>q1</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Trovo uno 0, lo sostituisco con _ e poi passo a q2 che va a copiarlo</description>
+		</state>
+		<state>
+			<name>q2</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Va a copiare lo 0 a dx</description>
+		</state>
+		<state>
+			<name>q3</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>ora sono a dx della stringa, vado a inserire 0</description>
+		</state>
+		<state>
+			<name>q4</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Ho sostituito lo _ con 0, ora torno indietro</description>
+		</state>
+		<state>
+			<name>q5</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Torno dalla seconda stringa alla prima</description>
+		</state>
+	</states>
+	<instructions>
+		<instruction>
+			<value>q0 _ -> q1 _ R</value>
+			<description>Stato iniziale</description>
+		</instruction>
+		<instruction>
+			<value>q1 0 -> q2 _ R</value>
+			<description>Trovo uno 0, lo sostituisco con _ e poi passo a q2 che va in fondo della stringa</description>
+		</instruction>
+		<instruction>
+			<value>q1 _ -> halt _ S</value>
+			<description>Ho finito di trasportare</description>
+		</instruction>
+		<instruction>
+			<value>q2 _ -> q3 _ R</value>
+			<description>Supero lo spazio e passo a q3 che va a inserire uno 0 a dx</description>
+		</instruction>
+		<instruction>
+			<value>q2 0 -> q2 0 R</value>
+			<description>Devo arrivare in fondo alla stringa</description>
+		</instruction>
+		<instruction>
+			<value>q3 _ -> q4 0 L</value>
+			<description>Trovo _ allora sostituisco con 0, passo a q4 e torno indietro</description>
+		</instruction>
+		<instruction>
+			<value>q3 0 -> q3 0 R</value>
+			<description>Sono a dx, procedo finche non trovo _</description>
+		</instruction>
+		<instruction>
+			<value>q4 _ -> q5 _ L</value>
+			<description>Torno alla fine della prima stringa</description>
+		</instruction>
+		<instruction>
+			<value>q4 0 -> q4 0 L</value>
+			<description>Sto tornando indietro con q4 fino allo spazio che divide le due stringhe</description>
+		</instruction>
+		<instruction>
+			<value>q5 0 -> q5 0 L</value>
+			<description>Torno indietro fino al primo carattere che ho copiato</description>
+		</instruction>
+		<instruction>
+			<value>q5 _ -> q1 0 R</value>
+			<description>Cambio il carattere che avevo temporaneamente eliminato, lo riscrivo e mi sposto avanti di 1 (rieseguendo il ciclo da capo)</description>
+		</instruction>
+	</instructions>
+	<tapes>
+		<tape>_0000_</tape>
+	</tapes>
+</machine>

@@ -1,0 +1,137 @@
+<machine>
+	<io_machine>false</io_machine>
+	<tapes_number>1</tapes_number>
+	<alphabet>
+		<blank>_</blank>
+		<symbols>01</symbols>
+	</alphabet>
+	<states>
+		<state>
+			<name>q0</name>
+			<initial>true</initial>
+			<final>false</final>
+			<description>Initial state</description>
+		</state>
+		<state>
+			<name>q1</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Ho letto 0, vado fino in fondo alla stringa</description>
+		</state>
+		<state>
+			<name>q2</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Sono arrivato in fondo alla stringa, se trovo 0 al successivo allora prosegui</description>
+		</state>
+		<state>
+			<name>halt</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>no</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>yes</name>
+			<initial>false</initial>
+			<final>true</final>
+			<description></description>
+		</state>
+		<state>
+			<name>back</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>ritorna a inizio stringa senza toccare niente</description>
+		</state>
+		<state>
+			<name>q3</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Inizio a cercare un 1</description>
+		</state>
+		<state>
+			<name>q4</name>
+			<initial>false</initial>
+			<final>false</final>
+			<description>Sono arrivato in fondo alla stringa, se trovo 1 al successivo allora prosegui</description>
+		</state>
+	</states>
+	<instructions>
+		<instruction>
+			<value>back _ -> q0 _ S</value>
+			<description>Ritorno indietro ad inizio stringa</description>
+		</instruction>
+		<instruction>
+			<value>back 0 -> back 0 L</value>
+			<description>Ritorno indietro ad inizio stringa</description>
+		</instruction>
+		<instruction>
+			<value>back 1 -> back 1 L</value>
+			<description>Ritorno indietro ad inizio stringa</description>
+		</instruction>
+		<instruction>
+			<value>q0 # -> yes # R</value>
+			<description>Se e' arrivato fin qui allora ha finito</description>
+		</instruction>
+		<instruction>
+			<value>q0 _ -> q0 _ R</value>
+			<description>Inizio</description>
+		</instruction>
+		<instruction>
+			<value>q0 0 -> q1 _ R</value>
+			<description>Se vedo uno 0, vado alla ricerca di uno 0 in fondo (q1)</description>
+		</instruction>
+		<instruction>
+			<value>q0 1 -> q3 _ R</value>
+			<description>Se vedo uno 1, vado alla ricerca di uno 1 in fondo (q3)</description>
+		</instruction>
+		<instruction>
+			<value>q1 _ -> q2 # L</value>
+			<description>Sono arrivato in fondo, setto # che mi dice che questa e' la fine della stringa</description>
+		</instruction>
+		<instruction>
+			<value>q1 0 -> q1 0 R</value>
+			<description>q1 lo uso per scorrere in fondo cercando lo 0</description>
+		</instruction>
+		<instruction>
+			<value>q1 1 -> q1 1 R</value>
+			<description>q1 lo uso per scorrere in fondo cercando lo 0</description>
+		</instruction>
+		<instruction>
+			<value>q2 0 -> back _ L</value>
+			<description>L'ultimo carattere e' 0, ovvero uguale al primo, ok continuo</description>
+		</instruction>
+		<instruction>
+			<value>q2 1 -> no # S</value>
+			<description>Non ha trovato uno 0 -> non e' palindromo</description>
+		</instruction>
+		<instruction>
+			<value>q3 _ -> q4 # L</value>
+			<description>Sono arrivato in fondo, setto # che mi dice che questa e' la fine della stringa</description>
+		</instruction>
+		<instruction>
+			<value>q3 0 -> q3 0 R</value>
+			<description>q3 lo uso per scorrere in fondo cercando l'1</description>
+		</instruction>
+		<instruction>
+			<value>q3 1 -> q3 1 R</value>
+			<description>q3 lo uso per scorrere in fondo cercando l'1</description>
+		</instruction>
+		<instruction>
+			<value>q4 0 -> no # S</value>
+			<description>Non ha trovato uno 1 -> non e' palindromo</description>
+		</instruction>
+		<instruction>
+			<value>q4 1 -> back _ L</value>
+			<description>L'ultimo carattere e' 1, ovvero uguale al primo, ok continuo</description>
+		</instruction>
+	</instructions>
+	<tapes>
+		<tape>____#_</tape>
+	</tapes>
+</machine>
