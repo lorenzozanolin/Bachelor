@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Test
+comment1.params=n
+comment1.target=void\ Gioca(int)
+comment2.params=b\ gui
+comment2.target=void\ AssociaMatrice(PuzzleBoardC,\ puzzleboard.PuzzleBoard)
+comment3.params=b\ gui\ k
+comment3.target=void\ SpostaPedina(PuzzleBoardC,\ puzzleboard.PuzzleBoard,\ int)
+comment4.params=b\ k
+comment4.target=int[]\ CercaCoordinate(PuzzleBoardC,\ int)
+numComments=5

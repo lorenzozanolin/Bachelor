@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Queens
+comment1.params=n
+comment1.target=int\ numberOfSolutions(int)
+comment1.text=\n\ I.\ Numero\ di\ soluzioni\:\n\n\n\ Il\ numero\ di\ modi\ diversi\ in\ cui\ si\ possono\ disporre\ n\ regine\n\n\ \ \ numberOfSolutions(\ n\ )\n\n\ in\ una\ scacchiera\ n\ x\ n\ e'\ dato\ dal\ numero\ di\ modi\ diversi\ in\n\ cui\ si\ puo'\ completare\ la\ disposizione\ delle\ regine\ a\ partire\n\ da\ una\ scacchiera\ n\ x\ n\ inizialmente\ vuota\n\n\ \ \ numberOfCompletions(\ new\ Board(n)\ )\n
+comment2.params=b
+comment2.target=int\ numberOfCompletions(Board)
+comment2.text=\n\ Il\ numero\ di\ modi\ in\ cui\ si\ puo'\ completare\ la\ disposizione\n\ a\ partire\ da\ una\ scacchiera\ b\ parzialmente\ configurata\n\n\ \ \ numberOfCompletions(\ b\ )\ \ \ \:\ int\n\n\ dove\ k\ regine\ (0\ <\=\ k\ <\ n)\ sono\ collocate\ nelle\ prime\ k\ righe\n\ di\ b,\ si\ puo'\ determinare\ a\ partire\ dalle\ configurazioni\n\ che\ si\ ottengono\ aggiungendo\ una\ regina\ nella\ riga\ k+1\ in\ tutti\n\ i\ modi\ possibili\ (nelle\ posizioni\ che\ non\ sono\ gia'\ minacciate)\n\n\ \ \ for\ (\ int\ j\=1;\ j<\=n;\ j\=j+1\ )\ {\n\ \ \ \ \ if\ (\ \!b.underAttack(i,j)\ )\ {\ ...\ b.addQueen(i,j)\ ...\ }\n\ \ \ }\n\n\ calcolando\ ricorsivamente\ per\ ciascuna\ di\ queste\ il\ numero\n\ di\ modi\ in\ cui\ si\ puo'\ completare\ la\ disposizione\n\n\ \ \ numberOfCompletions(\ b.addQueen(i,j)\ )\n\n\ e\ sommando\ i\ valori\ che\ ne\ risultano\n\n\ \ \ count\ \=\ count\ +\ numberOfCompletions(\ ...\ )\n\n\ Se\ invece\ la\ scacchiera\ rappresenta\ una\ soluzione\ (q\ \=\=\ n)\n\ c'e'\ un\ solo\ modo\ (banale)\ di\ completare\ la\ disposizione\:\n\ lasciare\ le\ cose\ come\ stanno\!\n
+comment3.params=args
+comment3.target=void\ main(java.lang.String[])
+numComments=4

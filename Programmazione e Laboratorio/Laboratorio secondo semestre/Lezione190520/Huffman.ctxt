@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=Huffman
+comment0.text=Codifica\ utilizzata\ per\ comprimere\ i\ file\ di\ testo\r\n\ \r\n\ Es\:\ sequenza\ di\ 12\ basi\ nucleiche\:\r\n\ A\ T\ T\ C\ T\ A\ C\ C\ T\ T\ G\ T\r\n\ \r\n\ Codifica\ binaria\ standard\ (tipo\ ASCII)\:\ due\ bit\ per\ distinguere\ tra\ quattro\ simboli\:\r\n\ A\ 00\r\n\ T\ 01\r\n\ C\ 10\r\n\ G\ 11\r\n\ \r\n\ Rappresentazione\ della\ sequenza\:\ 2x12\ \=\ 24\ bit\r\n\ \r\n\ 0\ 0\ 0\ 1\ 0\ 1\ 1\ 0\ 0\ 1\ 0\ 0\ 1\ 0\ 1\ 0\ 0\ 1\ 0\ 1\ 1\ 1\ 0\ 1\r\n\ \r\n\ \r\n\ Concetto\ di\ "Peso"\ dei\ simboli\ \=\ numero\ di\ occorrenze\ (frequenza)\ coppie\ simbolo/peso\ ordinate\ per\ peso\ crescente\:\r\n\ \r\n\ <\ G\:1,\ A\:2,\ C\:3,\ T\:6\ >\ ---->\ Il\ peso\ dipende\ da\ quante\ volte\ il\ carattere\ compare\r\n\ \r\n\ \r\n\ Costruzione\ dell'albero\ di\ Huffman\:\ aggregazione\ dei\ 2\ elementi\ di\ minor\ peso\ e\ riordinamento\ (per\ mantenere\ l'ordine\ crescente)\:\r\n<\ /\ \:1+2\=3,\ C\:3,\ T\:6\ >\r\n\ G\ \ \ A\r\n\ \r\n<\ \ \ /\ \:3+3\=6,\ T\:6\ >\r\n\ \ /\ \\\ \ C\r\n\ G\ \ \ A\r\n\ \r\n\ <\ /\ \ \:6+6\=12\ >\r\n\ \ /\ \\\ \ \ T\r\n\ /\ \\\ \ C\r\n\ G\ \ A\r\n\ \r\n\ In\ questo\ albero\ i\ simboli\ con\ frequenze\ piu'\ elevate\ stanno\ piu'\ vicini\ alla\ radice\r\n\ Dato\ che\ l'albero\ e'\ binario\ si\ puo'\ definire\ un\ percorso\ per\ raggiungere\ un\ carattere\:\ destra,\ sinistra,\ destra\ destra\ ecc\r\n\ Inoltre\ possiamo\ associare\ un\ bit\ alla\ direzione\:\ 0\ sinistra,\ 1\ destra\r\n\ \r\n\ Quindi\ si\ puo'\ rifare\ la\ tabella\ che\ associa\ dei\ bit\ al\ carattere\:\r\n\ \r\n\ A\ 001\ \ \ \ (sinistra,\ sinistra,\ destra)\r\n\ T\ \ \ 1\ \ \ \ (destra)\r\n\ C\ \ 01\ \ \ \ (sinistra,\ destra)\r\n\ G\ 000\ \ \ \ (sinistra,\ sinistra,\ sinistra)\r\n\ \r\n\ Nuova\ rappresentazione\ della\ sequenza\ (compressa)\:\r\n\ \r\n\ A\ \ \ T\ T\ C\ \ \ T\ A\ \ \ \ C\ \ \ C\ \ \ T\ T\ \ G\ \ \ T\r\n\ 001\ 1\ 1\ 01\ \ 1\ 001\ \ 01\ \ 01\ \ 1\ 1\ \ 000\ 1\ \ ---->\ 21\ bit\ (3\ bit\ in\ meno\ 12%)\r\n\ \r\n\ La\ decodifica\ avviene\ seguendo\ i\ bit\ come\ istruzioni\ per\ scendere\ attraverso\ l'albero\ e\ ricavare\ in\ questo\ modo\ il\ carattere\r\n\ (Si\ seguono\ i\ bit\ finche'\ non\ si\ arriva\ a\ una\ foglia,\ quindi\ non\ si\ possono\ confondere\ i\ caratteri)\r\n\ \r\n
+comment1.params=src\ dst
+comment1.target=void\ Occorrenze(java.lang.String,\ java.lang.String)
+comment2.params=src\ dst
+comment2.target=void\ CreaRandom(java.lang.String,\ java.lang.String)
+comment3.params=file1\ file2\ oc1\ oc2
+comment3.target=void\ Confronto(java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String)
+comment4.params=src
+comment4.target=int[]\ freqHistogram(java.lang.String)
+comment5.params=freq
+comment5.target=Node\ huffmanTree(int[])
+comment6.params=root
+comment6.target=java.lang.String[]\ codeTable(Node)
+comment7.params=n\ pre\ codes
+comment7.target=void\ fillTable(Node,\ java.lang.String,\ java.lang.String[])
+comment8.params=n
+comment8.target=java.lang.String\ flattenTree(Node)
+comment8.text=Per\ poter\ decomprimere\ e\ interpretare\ un\ file\ codificato\ con\ Huffman\ bisogna\ aggiungere\ l'intestazione,\ che\ comprende\:\r\nDimensione\ del\ file\r\n\ Codifica\ dell'albero\ di\ Huffman\r\n\ \r\n\ Codifica\ dell'albero\:\r\n\ @\ nodo\ intermedio\r\n\ Carattere\ per\ rappresentare\ una\ foglia\r\n\ \r\n\ Dato\ che\ l'albero\ e'\ binario\ non\ abbiamo\ bisogno\ di\ altro\r\n\ \r\n\ Es\:\r\n\ <\ /\ \ \\\:6+6\=12\ >\r\n\ \ /\ \\\ \ \ T\r\n\ /\ \\\ \ C\r\n\ G\ \ A\r\n\ Diventa\r\n\ @@@GACT\r\n\ \r\n\ Per\ chiarezza\:\r\n\ {@[@(@GA)C]T}\r\n\ \r\n\ In\ un\ albero\ binario\ si\ hanno\ n\ foglie\ e\ n-1\ nodi\ interni\r\n
+comment9.params=src\ dst
+comment9.target=void\ compress(java.lang.String,\ java.lang.String)
+numComments=10

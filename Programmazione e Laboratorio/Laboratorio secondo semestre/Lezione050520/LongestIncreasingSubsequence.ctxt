@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=LongestIncreasingSubsequence
+comment1.params=s
+comment1.target=int\ llis(int[])
+comment2.params=s\ i\ t
+comment2.target=int\ llisRec(int[],\ int,\ int)
+comment3.params=s
+comment3.target=int\ llisMem(int[])
+comment4.params=v\ h\ i\ j
+comment4.target=int\ llisMemRec(int[],\ int[][],\ int,\ int)
+comment5.params=s
+comment5.target=IntSList\ lis(int[])
+comment6.params=v\ mat\ i\ j
+comment6.target=IntSList\ lisRec(int[],\ IntSList[][],\ int,\ int)
+comment7.params=s1\ s2
+comment7.target=IntSList\ Better(IntSList,\ IntSList)
+comment8.params=s
+comment8.target=int\ llisCounter(int[])
+comment9.params=v\ h\ i\ j\ c
+comment9.target=int\ llisMemRec2(int[],\ int[][],\ int,\ int,\ int)
+numComments=10

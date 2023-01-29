@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=NodeQueue
+comment0.text=\r\n\ public\ NodeQueue()\ costruttore\:\ creazione\ della\ coda\ vuota\r\n\ public\ int\ size()\ restituisce\ il\ numero\ di\ elementi\ contenuti\ nella\ coda\r\n\ public\ Node\ peek()\ restituisce\ l\u2019elemento\ con\ \u201Cpeso\ minore\u201D\ (senza\ rimuoverlo\ dalla\ coda)\r\n\ public\ Node\ poll()\ restituisce\ e\ rimuove\ dalla\ coda\ l\u2019elemento\ con\ \u201Cpeso\ minore\u201D\r\n\ public\ void\ add(\ Node\ n\ )\ aggiunge\ un\ nuovo\ elemento\ n\ alla\ coda\r\n\r\n
+comment1.params=
+comment1.target=NodeQueue()
+comment2.params=
+comment2.target=int\ Size()
+comment3.params=
+comment3.target=Node\ Peek()
+comment4.params=
+comment4.target=int\ RicercaMin()
+numComments=5

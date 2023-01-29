@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.target=TernaryBalanced
+comment0.text=\r\n\ \ \ \ \ (define\ btr-succ\ ;\ val\:\ stringa\ di\ -/./+\r\n\ \ \ \ \ \ \ \ (lambda\ (btr)\ ;\ btr\:\ stringa\ di\ -/./+\r\n\ \ \ \ \ \ \ \ \ \ \ \ (let\ ((n\ (string-length\ btr)))\ ;\ (brt\ \=\ "."\ oppure\ inizia\ con\ "+")\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (let\ ((lsb\ (string-ref\ btr\ (-\ n\ 1))))\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (if\ (\=\ n\ 1)\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (if\ (char\=?\ lsb\ \#\\+)\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "+-"\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "+")\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (let\ ((pre\ (substring\ btr\ 0\ (-\ n\ 1))))\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (if\ (char\=?\ lsb\ \#\\+)\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (string-append\ (btr-succ\ pre)\ "-")\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (string-append\ pre\ (if\ (char\=?\ lsb\ \#\\-)\ "."\ "+"))\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ))\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )))\r\n\ \ \ \ \ \ \ \ \ ))\r\n
+comment1.params=btr
+comment1.target=java.lang.String\ BtrSucc(java.lang.String)
+numComments=2

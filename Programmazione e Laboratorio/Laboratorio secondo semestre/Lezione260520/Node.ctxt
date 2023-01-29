@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Node
+comment1.params=chr\ wgt
+comment1.target=Node(char,\ int)
+comment2.params=lft\ rgt
+comment2.target=Node(Node,\ Node)
+comment3.params=
+comment3.target=boolean\ isLeaf()
+comment4.params=
+comment4.target=int\ weight()
+comment5.params=
+comment5.target=Node\ left()
+comment6.params=
+comment6.target=Node\ right()
+comment7.params=
+comment7.target=char\ character()
+comment8.params=n
+comment8.target=int\ compareTo(Node)
+comment9.params=
+comment9.target=java.lang.String\ toString()
+numComments=10

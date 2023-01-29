@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.target=ComplementoUno
+comment0.text=(define\ ones-complement\ \ ;\ val\:\ stringa\ di\ 0/1\n\ \ \ \ (lambda\ (bin)\ \ \ \ \ \ \ \ \ \ ;\ bin\:\ stringa\ di\ 0/1\n\ \ \ \ \ \ \ \ (if\ (string\=?\ bin\ "")\n\ \ \ \ \ \ \ \ \ \ \ \ ""\n\ \ \ \ \ \ \ \ \ \ \ \ (string-append\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (ones-complement\ (substring\ bin\ 0\ (-\ (string-length\ bin)\ 1)))\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (bit-complement\ (substring\ bin\ (-\ (string-length\ bin)\ 1)))\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ))\n\ \ \ \ ))\n\n\ \ \ \ \n\ \ \ \ \n(define\ bit-complement\ \ \ ;\ val\:\ stringa\n\ \ (lambda\ (bit)\ \ \ \ \ \ \ \ \ \ ;\ bit\:\ stringa\n\ \ \ \ (if\ (string\=?\ bit\ "0")\n\ \ \ \ \ \ \ \ "1"\n\ \ \ \ \ \ \ \ "0"\n\ \ \ \ \ \ \ \ )))\n
+comment1.params=bin
+comment1.target=java.lang.String\ OnesComplement(java.lang.String)
+numComments=2
