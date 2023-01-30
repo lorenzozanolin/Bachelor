@@ -1,0 +1,16 @@
+LIST COMPREHENSION: istruzioni che permettono di scrivere un for in una sola riga, es.squares = [x ** 2 for x in nums]
+CONTAINERS: 
+    LISTE (resizable e possono contenere tipi non omogenei) => [],
+    DIZIONARI (salvano (key,value) come gli array che hanno i nomi con indici),
+    SET (collezione non ordinata di elementi DISTINTI) => {},
+    TUPLE (è una lista IMMUTABILE di valori)
+
+NUMPY: libreria matematica che introduce gli array (generalizzazione delle matrici).
+       Degli array si può fare SLICING, gli array hanno elementi dello stesso tipo.
+
+MATPLOTLIB: libreria che permette di plottare i risultati su dei grafici. 
+            plot() disegna delle linee
+            scatter() disegna dei punti
+
+PANDAS: libreria che introduce funzioni per la manipolazione di dati, è un collegamento con R.
+        Introduce i DATAFRAME (tabella di dati statistici) che possono essere anche caricate da un .csv (con pd.read_csv())

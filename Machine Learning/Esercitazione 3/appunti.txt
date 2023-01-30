@@ -1,0 +1,20 @@
+BAG OF WORDS:  
+il metodo fit() costruisce il VOCABOLARIO
+il metodo trasform() crea il modello BAG OF WORDS (trasforma il dataset iniziale in un array --> trasforma il testo in un vettore)
+
+Nell'esempio Sentiment Analysis of Movie Reviews, si vuole effettuare un modello di regressione logistica (CLASSIFICAZIONE BINARIA):
+creiamo un dataframe di test e uno di training
+Una volta che ho il dataset devo applicarci il bag of words.
+
+Essendo che finiamo in una situazione di overfitting, utilizziamo la libreria GridSearchCV in modo da ridurre l'overfitting.
+
+Nota: A token that appears only in a single document is unlikely to appear in the test set and is therefore not helpful.
+
+Per velocizzare il processo dobbiamo ridurre la dimensione del VOCABOLARIO (togliamo parole inutili o scritte male che quindi compaiono solo in uno o pochi documenti).
+Un raffinamento è la TOKENIZATION (più precisamente utilizziamo lo stemming) => prendo solo la parte "identificatrice" (radice) di una parola.
+
+L'ultimo raffinamento è riscalare i dati con tf-idf, dove andiamo a modificare il BOW. 
+Do un maggior peso alle parole che compaiono in pochi documenti ma tante volte in quelli. (sono rilevanti per quei pochi documenti)
+Le parole irrilevanti invece sono quelle che compaiono in molti documenti.
+
+L'ultimo grafico mostra qual è il peso che il modello assegna ad ogni parola.

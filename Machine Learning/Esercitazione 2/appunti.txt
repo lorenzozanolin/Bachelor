@@ -1,0 +1,11 @@
+Una volta che stampiamo la tabella, noi vogliamo vedere se esiste un andamento lineare tra i vari attributi della tabella.
+
+paragrafo: PLOTTING THE DATA
+Degli attributi della tabella, il target è MEDV e dobbiamo vedere da quale attributo dipende (ovvero che è in relazione)
+Faccio un pairplot, ovvero plotto a coppie tutte le possibili coppie di variabili (colonne) della tabella.
+Facendo ciò posso vedere se ci sono variabili che sono dipendenti dalla variabile target (MEDV).
+In questo caso sembra esserci una dipendenza tra RM (numero di stanze) e MEDV.
+
+facciamo la normalizzazione (feature normalization) perchè con i dati scalati il gradient descent funziona meglio.
+Nell'ultima parte mostra come noi abbiamo implementato la LINEAR REGRESSION, poi per verificare se l'abbiamo implementata correttamente possiamo utilizzare la LINEAR REGRESSION che già esiste
+nella libreria scikit-learn.

@@ -1,0 +1,22 @@
+ESERCIZIO 1
+
+Vogliamo costruire un sistema di classificazione binaria sull'internet movie database.
+Quello che abbiamo fatto con i modelli (nell'esercizio precedente) ora lo facciamo con una rete neurale.
+KERAS è la libreria che ci permette di costruire la rete neurale.
+
+VETTORIZZAZIONE: Essendo che il nostro vocabolario è già stato preprocessato (quindi non ho testo bensì indici != numeri) posso riconvertirlo in testo con la funzione get_word_index()
+Bisogna comunque trasformare le frasi in vettori.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ESERCIZIO 2
+Vogliamo costruire un classificatore su 46 classi (classificatore multiclasse, SINGLE LABEL ovvero che ogni elemento appartiene SOLO ad una classe).
+Ogni notizia appartiene ad una delle 46 argomenti, quindi 1 testo è associato ad una sola label (di 46 presenti)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ESERCIZIO 3
+Passiamo dalla classificazione alla regressione, quindi alla previsione di un valore (nel continuo)
+Bisogna costruire una rete neurale che calcola una regressione.
+I numeri che ci vengono forniti vanno standardizzati (in base ai dati di training) => vanno riscalati i valori. Non è fondamentale però se non lo si fa la rete neurale converge più lentamente.
+MSE è quadratica, MAE si basa sui valori assoluti. l'mse funziona male se ci sono anomalie tra i dati (valori altalenanti), infatti elevare al quadrato amplifica questa varianza
