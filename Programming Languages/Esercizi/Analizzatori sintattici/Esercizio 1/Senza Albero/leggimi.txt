@@ -1,0 +1,5 @@
+Il file Tree.c è una libreria che permette di stampare l'albero di derivazione, basta importarlo e si possono usare le sue funzioni.
+
+Per importare: #include "Tree.h"
+
+Per compilare: gcc -ll y.tab.c lex.yy.c Tree.c

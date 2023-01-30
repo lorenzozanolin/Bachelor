@@ -1,0 +1,3 @@
+Per compilare il file lex: lex file.l
+Per compilare il file yacc: yacc -d file.y
+Per linkare i due file: gcc -ll y.tab.c lex.yy.c

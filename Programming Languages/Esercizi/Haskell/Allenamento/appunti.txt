@@ -1,0 +1,115 @@
+PRELUDE: è un modulo che contiene una serie di definizioni di funzioni standard, automaticamente importate in ogni modulo haskell che noi scriviamo.
+
+ES. se noi facciamo :t (5 + 5) otteniamo l'output: (5 + 5) :: Num a => a. Questo perchè (5 + 5) non è una funzione, bensì un'espressione.
+    invece se facciamo :t (5 +) otteniamo: (5 +) :: Num a => a -> a. Questo perchè (5 +) è una funzione, perciò ha come input (a) e come output (a).
+Questo perchè una funzione è qualcosa che ha un INPUT e un OUTPUT, invece un'espressione viene semplicemente valutata, quindi ha un risultato.
+
+Per definire una funzione uso la seguente sintassi => succ n m = if n < m then n + 1 else n
+(if then else) è un'espressione, perciò deve sempre ritornare un valore => questo significa che per ogni if deve sempre esserci un else perchè sennò rischierei di non entrare nell'if e di conseguenza non ritornare nulla.
+
+Se voglio salvare un'espressione allora devo utilizzare le variabili (che sono IMMUTABILI, ovvero una volta che gli assegno un valore non posso più modificarlo) secondo la sintassi: nomeVariabile = espressione.
+Nelle liste per vedere l'elemento in posizione i, si utilizza la seguente sintassi: miaLista !! i
+
+
+In generale una lista è formata da: - HEAD - | --------- TAIL --------- (HEAD è il primo elemento, TAIL sarebbe [1...length - 1], quindi tutto il resto della lista)
+                                    --------- INIT --------- | - LAST - (LAST è l'ultimo elemento, INIT sarebbe [0...length - 2], quindi tutto il resto della lista)
+
+Per accedere al primo elemento della lista => head miaLista.
+Per prendere i primi n elementi di una lista => take n miaLista
+Per controllare se una lista è vuota => null miaLista
+Per vedere se la lista contiene un elemento => elem oggettoDaCercare miaLista
+Per prendere l'elemento più grande di una lista => maximum miaLista (o minimum miaLista)
+Per fare sommatorie/produttorie => sum miaLista (es. miaLista = [1..3]) (o product [1..3])
+
+                                       FUN IN   EXPR
+Un esempio è definire il fattoriale => fatt n = product [1..n]
+
+Posso usare anche le LIST COMPREHENSION: [espressione | x <- xs, condizioni su x]
+es. numeriPari = [x | x <- [0..], mod x 2 == 0] 
+
+Essendo che le lista sono per forza composte da elementi omogenei (dello stesso tipo), mentre le tuple no.. quando faccio :t su una lista mi stampa solo una volta il tipo, mentre su una tupla mi dice in ogni posizione che tipo c'è
+
+Una volta aperto ghci, se voglio importare un file haskell (.hs) lo faccio con :l nomeFile.
+Facendo :l importo nel modulo tutte le funzioni contenute nel file haskell.
+
+PATTERN MATCHING: controllo se i dati su cui lavorano rispettano un certo pattern, ovvero definisco la funzione a pattern (una sorta di switch).
+es. lucky 7 = "LUCKY NUMBER SEVEN!"  
+    lucky x = "Sorry, you're out of luck, pal!" 
+
+Gli statement vengono controllati sequenzialmente, perciò il caso lucky x verrà controllato per ultimo.
+
+Per lanciare un'eccezione: funzione input =  error "messaggio"
+Occhio se dichiari una lista, con (x:xs) assumi che non sia vuota, invece solo con il nome (es. miaLista) può esserlo
+
+Normalmente i tipi vanno dichiarati (TYPE SIGNATURE),lo si può fare con ::, es.
+n = 5 :: Int
+Si può anche fare a meno ma si rischia di avere una funzione più generica di quella che intendiamo noi.
+
+La differenza tra Float e Double è la precisione della virgola. Double ha il doppio della precisione di float.
+
+Per verificare il TIPO uso :t nomeOggetto e nomeOggetto può essere una struttura dati o una funzione.
+Se vogliamo verificare il tipo della funzione elemAux otteniamo:
+
+> :t elemAux 
+elemAux :: (Ord t, Num t) => [a] -> t -> t -> [a]
+
+Solitamente tutto quello che viene prima dell'ultima freccia è l'input, mentre quello dopo è l'output.
+
+Le funzioni finora scritte: 
+    - erano una sola equazione, es. succ n = n + 1, oppure
+
+    - erano un insieme di equazioni (PATTERN MATCHING), es.  rimuoviIndicePari [] = error "lista vuota"
+                                                            rimuoviIndicePari lista = rimuoviAux lista 0
+
+    - usano le GUARDIE, (una specie di switch), es. rimuoviAux lista pos
+                                                        | (mod pos 2) == 0 = rimuoviAux (tail lista) (pos + 1)
+                                                        | null lista = []
+                                                        | otherwise = (head lista):(rimuoviAux (tail lista) (pos + 1))
+
+Spesso pattern matching e guards sono intercambiabili. 
+Spesso le guardie sono meno efficienti perchè molte volte vado a ricalcolare le stesse espressioni in più parti del codice (nell'esempio sopra tail viene calcolato più volte)
+ => per evitare ciò possiamo utilizzare il WHERE dove andiamo ad inserire un ambiente locale dove salvare i dati che riutilizziamo
+
+ es. rimuoviAux lista pos
+        | (mod pos 2) == 0 = rimuoviAux t (pos + 1)
+        | null lista = []
+        | otherwise = h:(rimuoviAux (tail lista) (pos + 1))
+        where 
+            t = tail lista
+            h = head lista 
+
+
+Se volessi salvare una tupla (contenente le informazioni di una persona) non posso fare i controlli sui vari campi.
+es. m = ("Marco", 28, 'M'), ma anche la tupla m = ("Marco", 28, 'P') andrebbe bene... anche se P non è un sesso valido.
+
+Per costruire dei TIPI personalizzati (struct) si può utilizzare il costrutto data:
+es. data Persona = Persona String Int Sesso (dove Persona è il costruttore)
+    data Sesso = Maschio | Femmina (dove Maschio e Femmina sono due costruttori)
+    m = Persona "Marco" 28 Maschio
+
+Facendo così però i campi non hanno comunque ancora un nome (perciò bisogna ricordare l'ordine)
+Allora si può procedere come segue:
+es. data Persona = Persona {
+        nome :: String,
+        eta :: Int,
+        sesso :: Sesso
+    }
+
+    m = Persona {
+        nome = "Marco",
+        eta = 28,
+        sesso = Maschio
+    } => qui l'ordine in cui assegno i campi non è importante.. dato che c'è il nome ad identificarli
+
+e posso accedere ai singoli campi, es. eta m
+
+Se la funzione f è commutativa => foldr e foldf sono uguali.
+La differenza tra foldR e foldL è il verso di associazione:
+
+    - FOLDL, associo a sx (es. somma di una lista  ((0+1)+2)+3))
+        foldl f valIniz [] = valIniz
+        foldl f valInizi (x:xs) = foldl f (f valIniz x) xs		=> quando applico f i parametri che gli associo sono il valore iniziale e la TESTA (primo elemento della lista), quindi non tutta la lista
+    
+    - FOLDR, associo a dx, anche se parto da sx è come se fosse una ricorsione di coda (es. somma di una lista  (1+..(n-1+(0+n))) .. guarda l'ordine delle parentesi, la prima somma che verrà eseguita sarà 0 + n
+        foldr f valIniz [] = valIniz
+        foldr f valIniz (x:xs) = f x (foldr f valIniz xs) 
