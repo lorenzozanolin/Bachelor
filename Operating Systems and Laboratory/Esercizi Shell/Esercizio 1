@@ -1,0 +1,44 @@
+1. Esplorate il vostro file system. Qual e il pathname della vostra home directory?
+
+    cd        //torno alla home directory
+    pwd       //mi mostra il pathname di dove mi trovo
+
+
+2. Visualizzate ifile della vostra home directory ordinati in base alla data di ultima modica.
+
+    ls -t
+
+
+3. Che differenza c'e tra i comandi cat, more, tail?
+
+    cat serve a concatenarefile (o lo standard input) inviando il risultato dell'operazione allo standard output
+        --> se il file NON esiste lui NON lo crea, invece nano lo crea;
+
+    more è un filtro che serve a visualizzare su schermo un flusso di testo una pagina per volta;
+
+    tail stampa su standard output le ultime 10 righe deifile forniti come argomenti.
+
+
+4. Un link simbolico può puntare ad un altro link che a sua volta punta ad un file?
+
+    si:  ln -s prova.txt prova2.txt //ora prova2.txt è un link simbolico
+         ln -s prova2.txt prova3.txt //ora prova3.txt è un link simbolico (ad un altro link simbolico)
+
+
+   Qual è lo svantaggio dei link simbolici rispetto ai link hard?
+
+   Lo svantaggio è che la minore efficienza di accesso al file con il link simbolico rispetto che all'hard,
+   infatti per accedere ad un file bisogna conoscere il suo # di inode e, mentre nel link hard i due file hanno lo stesso numero di inode,
+   nel link simbolico esso dovrà recuperare il pathname del file da aprire e poi da li leggere il suo # di inode.
+
+
+5. Trovate un modo per ottenere l'elenco delle subdirectory contenute ricorsivamente nella vostra home.
+
+    cd
+    ls -R
+
+6. Trovate due modi diversi per creare unfile
+
+    touch nomefile.txt --> crea il file se non esiste. touch serve per cambiare il timestamp di un file
+    nano nomefile.txt
+    cat >nome_file     --> per uscire uso ctrl+D

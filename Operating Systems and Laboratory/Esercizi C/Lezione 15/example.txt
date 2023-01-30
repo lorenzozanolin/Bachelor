@@ -1,0 +1,2 @@
+cat example.txt | wc -w
+cat prova.txt | wc -w

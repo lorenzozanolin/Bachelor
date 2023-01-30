@@ -1,0 +1,8 @@
+main.o : main.c list.h
+	clang -c main.c
+
+list.o : list.c list.h
+	clang -c list.c 
+
+main : list.o main.o
+	clang list.o main.o -o main
