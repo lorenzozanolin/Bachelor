@@ -1,0 +1,41 @@
+1. Per visione indiretta si intende che l'utente vede il mondo aumentato attraverso uno schermo (es di un tablet)
+   e quindi la visione non e' diretta, un esempio e' l'app di Ikea che permette di visualizzare la tua stanza (attraverso la fotocamera)
+   con l'aggiunta dei mobili al di sopra.
+   Per visione diretta si intende che l'utente vede il mondo aumentato attraverso uno schermo trasparente e quindi e' come se vedesse
+   attraverso a degli occhiali, un esempio sono gli Hololens di Microsoft.
+
+2. Nei sistemi basati su marker fiduciali il software cerca dei marker artificiali (ovvero formati da forme squadrate, stampati in bianco e nero)
+   inseriti nella scena e ne calcola una matrice di posizione.
+   Nei sistemi basati su marker naturali il software tramite dei pattern cerca nell'ambiente circostante (inquadrato) dei possibili oggetti reali
+   che possono fungere da marker, ovviamente questi sistemi di riconoscimento sono molto piu complessi di quelli su marker fiduciali in quanto
+   qualsiasi oggetto reale puo' diventare un marker e quindi possono insorgere problemi di rilevazione, ad esempio errori di illuminazione o di
+   occlusione. In questo sistema al posto che concentrarsi sulla ricerca di un singolo oggetto si cerca in tutto l'ambiente circostante.
+
+3. In una proiezione prospettica l'osservatore e' posto a distanza finita dall'oggetto e i raggi di luce che partono dall'oggetto tendono verso
+   l'osservatore. Questa proiezione soffre di distorsione prospettica e quindi tutte le linee che non sono parallele al piano di proiezione
+   risultano essere convergenti verso i punti di fuga, infatti si ha l'effetto di prospettiva dove piu un oggetto e' lontano piu sembra piccolo, viceversa piu si
+   avvicina piu si ingrandisce.
+   In una proiezione assonometrica l'osservatore e' posto a distanza infinita dall'oggetto e tutti i parallelisimi delle varie linee dell'oggetto
+   sono rispettati (quindi non soffre di distorsione prospettica)
+
+4. Per ruotare un oggetto 2D attorno ad un punto generico P, devo compiere una traslazione di tutti i punti del sistema in modo che il punto P (centro della rotazione)
+   arrivi a coincidere con l'origine del sistema di riferimento.
+   Successivamente compio la rotazione attorno al punto P ed infine compio l'operazione di traslazione inversa, ovvero ritraslo tutti i punti
+   in modo che il punto P coincida con la sua posizione iniziale.
+
+5. 3 0 0 9
+   0 3 0 3
+   0 0 3 6
+   0 0 0 1
+
+
+devo sempre traslare il punto che considero come centro della trasformazione all'origine
+nel 2d c'e' un punto che e' il centro della rotazione
+nel 3d c'e' un asse che e' l'asse di rotazione (che non si sposta mai durante la rotazione)
+Se non ci sono traslazioni non servono le coordinate omogenee
+
+Bezier:
+un punto di partenza
+si individua una tangente con un secondo punto (individua la direzione)
+un terzo punto in cui arriva la curva seguendo la direzione di una tangente definita da un quarto punto
+4 punti definiscono la forma di una linea curva
