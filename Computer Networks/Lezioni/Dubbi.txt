@@ -1,0 +1,269 @@
+INTRO:
+Il MULTIPLEXING lo usi per inviare piu’ segnali in un cavo. (Time-division per la commutazione di circuito ma richiede il CLOCK, frequency division, statistical che si adatta in base alla domanda di ciascun flusso).
+Un proxy e’ uno switch di liv.4
+Un SOCKET e’ un’interfaccia tra applicazioni e rete, e’ il punto di collegamento di un processo applicativo alla rete. => sono implementati a livello applicativo.
+Il SEGNALE e’ rappresentato rispetto al PERIODO (tempo), la BANDA e’ rappresentata rispetto alle FREQUENZE.
+THROUGHPUT: bit/s che possono essere trasmessi nel cavo (es. 1Kbs = 10^3 bits/s)
+BANDWIDTH: larghezza della frequenza di banda, ovvero la differenza tra frequenza massima e frequenza minima => ( f=1/T   Hz = 1/s )
+LATENZA = trasmissione (size/bandwidth => tempo che ci metto per codificare i dati) + propagazione (distanza/velocita’ luce => tempo che ci mette il router Gateway ad inviare all’altro router) +  queue.
+RITARDO (propagazione) * BANDWIDTH = carico massimo della rete, quanti bit devo inviare prima che il ricevente riceva il primo bit.
+Il JITTER e’ la varianza nel ritardo e solitamente e’ introdotto dalle code variabili dei router.
+DE/MULTIPLEXING a livello di cavo:liv.1, a livello di utente: liv.2-3, a livello di applicazione: liv.4
+
+PHY:
+PPP e' un protocollo usato per il collegamento punto-punto (es. tra router - router in fibra per lunghe distanze).
+Ethernet e' un protocollo per le LAN a mezzo CONDIVISO (quindi e' una P2P) => HO COLLISIONI. Se aggiungo un host le performance di rete diminuiscono (perche' il mezzo e' condiviso).
+La TOPOLOGIA a STELLA simula una Ethernet condivisa, in realta' ho solo collegamenti pc-switch percio' e' CENTRAL/MASTER (lo switch) che dirige tutti => NON HO COLLISIONI. Se aggiungo un host le performance di rete NON PER FORZA diminuiscono (perche' il mezzo non e' condiviso e ogni host trasmette alla massima velocita allo switch, il limite e' la velocita di questo).
+Le informazioni possono essere trasmesse via cavo variando alcune proprietà’ fisiche, ad esempio la tensione.
+Encoding vuol dire codificare i bit e trasmetterli sul cavo, lo faccio con la MODULAZIONE e trasmetto SIMBOLI, che sono stati o livelli (es. o 0V o 5V => se ho un alfabeto di N simboli in ogni livello io mando istantanemente log2(N) bit).
+Potrei aumentare il bitrate aggiungendo sempre piu' livelli (simboli) in modo da poter inviare (istantanemente) piu' bit su un singolo livello, soltanto che se faccio troppi livelli poi rischio che i bit non arrivino corretti, a causa dei rumori (che mi spostano da un livello ad un altro). 
+
+DL:
+Problema del framing e' capire dal flusso di bit dove INIZIA e dove FINISCE un frame; rilevare gli errori nei frame,
+Con One/Two-dimensional parity si possono RILEVARE gli errori ma non correggerli (in quanto non so quali siano i bit errati), lo stesso con CRC.
+Nel Bluetooth il MASTER nei PARI, SLAVE nei DISPARI e tutto passa per il master (non esiste comunicazione s-s). Un frame puo' durare 1,3,5 slot. Ricordati in ogni caso di dividere per 2.
+Senza considerare i preamboli (es. Ethernet, Wifi, Bluetooth) il FRAME ha 14B di INTESTAZIONE + 4B CRC + Payload (max 1500B).
+La FEC e' la tecnica per la CORREZIONE.
+A -> B <- C nodi NASCOSTI
+A <- B C nodi ESPOSTI
+MTU: Ethernet=1500B Wifi=2346B
+MTU e' il massimo payload di liv.2 trasportabile (ovvero il max. pacchetto IPv4 comprese le intestazioni di liv.3)
+
+SWITCHING:
+Come avviene la COMMUTAZIONE?
+Tre modalita': DATAGRAM (ogni frame ha tutti gli indirizzi, non ho garanzie, costruisco il percorso man mano), VIRTUAL CIRCUIT (ogni frame ha solo il VCI e costruisco il percorso all'inizio della comunicazione pero' poi ho meno overhead) e SOURCE ROUTING (ogni frame contiene tutto il percorso, switch stupidi).
+Nel VIRTUAL CIRCUIT ho due modi per creare il circuito: a mano (circuito v. permanente, in realta anche per questo si usa il signalling) o con il SIGNALLING (circuito v. commutato => automatico).
+Come apprende uno SWITCH dove risiedono i vari host ? (nelle varie LAN collegate allo switch), ovvero quando arriva un frame nello switch lui associa la porta da cui arriva al mittente [mittente,porta] e poi se non ha una entry col destinatario inoltra su tutti
+A mano, osservando il traffico (non va se ci sono CICLI, AGGIUNGE informazioni SOLO DAL MITTENTE) o SPANNING TREE (risolve i cicli).
+Nello SPANNING TREE la ROOT e' lo switch con id PIU PICCOLO. Per ogni LAN prendo lo switch con cammino minimo dalla root (se ci sono piu' switch con cammino minimo allora scelgo quello con ID MINORE).
+ALGO di switching: arriva un frame sull'interfaccia x con [MAC_Mittente, MAC_Dest], if (MAC_Dest nella tabella) inoltro
+                                                                                    else FLOODING (tranne la porta da cui l'ho ricevuto) e associo alla porta x MAC_Mittente;
+
+NETWORK:
+Uno SWITCH (liv.2) NON puo' INTERCONNETTERE due RETI ETEROGENEE (solo stesso protocollo di liv.2), il ROUTER INTERCONNETTE RETI ETEROGENEE (perche' reincapsula i pacchetti in frame, cambiando l'interfaccia di liv.2 e il TTL). Due reti sono OMOGENEE se hanno lo stesso protocollo liv.2
+L'INTESTAZIONE di un IPv4 e' almeno 20B, la lunghezza max (compresa l'intestazione) e' 65535B. Per IPv6 ho 40B di intestazione e 64KB di payload.
+Quando FRAMMENTARE? quando un router deve inoltrare un pacchetto con length:x in una rete che ha MTU<x. La frammentazione la attua il ROUTER.
+Nella FRAMMENTAZIONE considero l'mtu ((payload+intestaz) liv.3) e seleziono il multiplo di 8 piu' vicino al PAYLOAD di liv.3 (del MTU, non del pacchetto di liv.3). Successivamente setto MORE=1 se ci sono altri frammenti (=0 altrimenti) e OFFSET=0 se e' il primo frammento (altrimenti OFFSET!=0). 
+Se M=0 F!=0 allora e' ultimo frammento. Se M=0 F=0 allora e' l'UNICO frammento.
+Il CIDR lo uso per raggruppare reti (anche subnettate) che hanno lo stesso prefisso di rete, ad es. se ho 8 subnet /24 allora differiscono di 3 bit (2^3=8) => con CIDR le raggruppo in /21. Raccolgo ciascuna rete fino al prefisso di rete uguale (guardo a bit).
+Fissata la parte NETWORK, ho la parte HOST: tutta i bit a 0 => indirizzo della rete, tutti i bit a 1 => indirizzo broadcast
+Con SUBNETTING vado a togliere dei bit dalla parte HOST per mapparci le SOTTORETI => [NETWORK, SUBNET, HOST] . Cosi ho stesso prefisso NETWORK per tutte le sottoreti, SUBNET diverso e HOST variabile. Il # di sottoreti => prefisso SUBNET. Il # di host per sottorete => prefisso HOST.
+Con DHCP l'host fa una richiesta in broadcast IP e inserisce anche il proprio MAC. Una volta arrivata (la richiesta) al server DHCP (tramite relay agent, oppure no) il server decide un IP e manda il pacchetto in UNICAST con il MAC del destinatario.
+Con ICMP quando invio un pacchetto di errore (signalling) inserisco nel data la prima parte del payload del pacchetto a cui mi riferisco (8B) + l'header del pacchetto a cui mi riferisco (20B) => quindi SI APPOGGIA SU IP (infatti crea un pacchetto ip e nel payload ci mette una parte del messaggio di errore)
+
+FORWARDING:
+Routing != forwarding. Il routing lo faccio per costruire le tabelle di forwarding e il forwarding per inviare i pacchetti.
+Una tabella di FORWARDING ha la seguente struttura: [IP RETE, SUBNET RETE, NEXT HOP]. Usando il CIDR ha la seguente notazione: [IP RETE con cidr, NEXT HOP]
+Il router per ogni pacchetto (che contiene solo IP destinazione) fa AND tra IpDest e Subnet (di ogni riga della fw table) e confronta se corrisponde con il corrispettivo IP RETE. Nel caso inoltra su quella linea.
+Nella tabella di INOLTRO [DEST, IF, NEXT HOP] e devo fare una entry per OGNI Collegamento diretto, poi quelle con next hop le posso raggruppare.
+
+ARP:
+Lo uso quando (host A) devo inviare un pacchetto all'interno/esterno della mia rete: so l'indirizzo ip ma non quello fisico del ricevitore (host B o default Gateway nel caso esca dalla LAN). Controllo nella ARP Table e se ce l'ho OK.
+Se non lo ho, invio in broadcast (FFF..) una richiesta e mi risponde con il suo MAC il diretto interessato. A aggiorna la sua ARP TABLE. [IP,MAC]
+I pacchetti ARP sono incapsulati dentro al payload del frame, ovviamente non usa IP essendo dello stesso livello. L'IP e' quello del destinatario finale, il MAC viene cambiato ad ogni salto ed e' quello del dispositivo successivo nel cammino.
+
+ROUTING INTRA-DOMAIN: (distance-vector o link-state)
+Con l'algoritmo di routing costruisco la ROUTING TABLE [IP RETE/CIDR, COSTO, IP NEXT HOP], da cui poi derivo la FORWARDING TABLE [IP RETE/CIDR, INTERFACCIA, MAC NEXT HOP].
+
+Con DISTANCE VECTOR invio informazioni di tutti soltanto ai vicini (tranne quelle su di me). In una rete di N nodi, ogni nodo ha una tabella di N righe [NODOi, COSTOi, NEXT HOP] => "passo per NEXT HOP e con COSTOi hop arrivo in NODOi". 
+Il nodo ricevente x riceve un vettore da y => aggiorna i costi dei nodi in cui il NEXT HOP = y (anche se maggiori), invece per gli altri calcola se passando per y costa meno (se si, allora setta il COSTO = COSTO x-y + COSTO y-nodo).
+Posso incombere nel problema del conto all'infinito (per i cicli e QUANDO SALTA UN LINK CHE COLLEGA un nodo che non puo essere raggiunto in altro modo), per risolvere: FINITE-INFINITE (limito a 15 hop e poi scarto), SPLIT HORIZON (non invio i dati a x relativi ai nodi che raggiungo passando per x (x=next-hop)), SPLIT HORIZON POISON REVERSE (invio tutto ma metto costo +inf per i next hop).
+RIP (che usa DISTANCE VECTOR) utilizza FINITE-INFINITE, ovvero al massimo 15 hop e poi il pacchetto muore.
+
+Con LINK STATE ROUTING invio informazioni dei vicini a tutti (quindi la cardinalita' dell'LSP e' il numero di vicini) (tramite il RELIABLE FLOODING, usando gli ack e i numeri di sequenza, per evitare di aggiornare con pacchetti vecchi) e successivamente calcolo i cammini minimi (PER OGNI NODO) con Dijkstra.
+Ogni LSP packet (quelli inviati in flooding) e' [ID, elenco vicini, N.sequenza, TTL]. Le liste CONFIRMED e TENTATIVE (in Dijkstra) sono: [ID destinazione, costo, NEXT HOP]
+OSPF (che usa LINK STATE) aggiunge l'autenticazione dei messaggi di instradamento, ulteriore gerarchia e bilanciamento del carico.
+
+ROUTING INTER-DOMAIN:
+Essendo AUTONOMI i vari AS ognuno puo' utilizzare tecniche di routing intra-domain diverse, percio' e' difficile calcolare i costi per percorsi che attraversano piu' AS.
+Gli AS sono: STUB (non hanno transito, collegati ad un solo AS => diventa multihomed se si collega a piu' di un AS e viceversa), MULTIHOMED (non hanno transito, collegati a piu AS), TRANSIT (hanno transito, collegati a piu AS).
+BGP pubblicizza tutti i percorsi come la lista completa di AS per raggiungere una rete precisa. POSSONO PUBBLICIZZARE TUTTO IL PERCORSO SOLO QUELLI DI TRANSITO, infatti la gerarchia e' TRANSITO -> STUB/MULTIHOMED.
+
+MULTICAST:
+multicast != multiple unicast. Ogni gruppo multicast ha un indirizzo di classe D (1110) e gli host che ci vogliono entrare usano il protocollo IGMP per avvertire il router sulla propria rete che vogliono ricevere i pacchetti di un determinato gruppo.
+Ogni router coinvolto, oltre a contenere la forwarding table deve anche contenere la MULTICAST FORWARDING TABLE che indica per ciascuna destinazione multicast che link usare.
+Nel multicast SOURCE-BASED: OGNI router contiene l'albero dei cammini MINIMI per ogni gruppo [Gruppo_i, IF (interfacce del router che si collegano a reti che si collegano al gruppo i) + IP ROUTER (router che fanno da next hop verso reti che si collegano al gruppo i)].
+Nel multicast GROUP-BASED: SOLO UN router (rendezvous router) contiene l'albero dei cammini MINIMI per ogni gruppo.
+
+DVMRP:
+Tecnica di multicast per reti di piccole dimensioni (a causa del flooding), prima inondo la rete (in maniera intelligente di pacchetti) con RPF e RPB, poi ogni router "parent" (router che fa da padre di una rete foglia => solo un router) invia la lista di gruppi verso cui NON e' interessata la rete.
+Nel caso in cui una rete avesse piu' router, ne eleggo solo uno "parent", ovvero quello da cui possono arrivare i pacchetti. Scelgo quello con ip minore.
+Vincolato all'algoritmo di unicast, infatti funziona solo se algo di routing unicast e' DISTANCE VECTOR (RIP) => ogni nodo sa qual e' il cammino minimo per arrivare a ciascuno degli altri nodi.
+Nella fase di FLOODING il mittente invia a tutti i suoi vicini e ciascuno di loro inoltra a tutti tranne quelli da cui l'ha ricevuto. (Inoltro a tutti tranne quello da cui ricevo AND inoltro soltanto quello da next hop => POSSONO ARRIVARMI PACCHETTI DUPLICATI MA NE INOLTRO SOLO UNO).
+
+PIM:
+Tecnica di multicast con due modalita: DENSE, SPARSE.
+DENSE: approcio SOURCE-BASED; se gli host sono dentro allo stesso AS (per reti piccole). Simile al DVMRP, ma non e' legato all'algoritmo di unicast. Approcio FLOOD & PRUNE.
+SPARSE: approcio GROUP-BASED; se gli host sono across the Internet. Per ogni AS c'e' un rendezvous router che contiene l'albero dei cammini minimi per ogni gruppo e ogni rete puo' richiedere di partecipare (JOIN) ad un gruppo mandando una richiesta in unicast al rendezvous.
+        Il router mittente (che vuole inviare al gruppo G) incapsula il pacchetto e lo invia in UNICAST al rendezvous che poi lo inviera' in MULTICAST ai vari router. 
+        Ci sono due ottimizzazioni: per evitare l'incapsulamento costruisco un albero "on the go" tra il mittente (root) e il rendezvous (foglia);
+                                    per evitare che il rendezvous faccia da collo di bottiglia (visto che il traffico passa tutto per lui) i client possono mandare delle join all'albero creato precedentemente in modo da ricevere i pacchetti direttamente dal mittente.
+
+TRASPORTO:
+Comunicazione tra programmi applicativi posti ai due estremi del canale => PROCESS TO PROCESS COMUNICATION. Il trasporto si occupa ad esempio di: garanzia di consegna del messaggio, consegna ordinata, controllo di flusso/congestione.
+NON SI OCCUPA DELLA SICUREZZA, per quello c'e' session.
+1 IP : N porte. Nella comunicazione si usano le SOCKET e ai due estremi deve esserci LO STESSO PROTOCOLLO di liv.4
+La comunicazione e' tipicamente CLIENT-SERVER in cui il server usa le well-known ports e scopre la porta del client quando lui fa una richiesta al srv.
+
+UDP:
+Estende le funzionalita' di IP ai processi (demultiplexer di liv.4) pero' non garantisce alcun ordine di consegna, arrivo sicuro, ecc. Un vantaggio e' il basso overhead.
+La porte ha associata una coda in cui vanno ad inserirsi tutti i pacchetti in arrivo, quando un processo vuole ricevere un messaggio preleva questo dalla coda in ordine FIFO. Se la coda e' piena ed arriva un messaggio => viene scartato.
+Datagram non numerati, fa anche il CONTROLLO CHECKSUM (se presente) ma se il pacchetto non e' corretto scarta sempre silenziosamente.
+Usato da DNS,DHCP,TFTP,broadcast,...
+Il campo LENTGH misura 16 bit, quindi al massimo 2^16 BYTE di payload.
+l'HEADER sono 8B.
+E' STATELESS
+
+TCP:
+Estende le funzionalita' di IP ai processi (demultiplexer di liv.4) pero' garantisce un ordine di consegna, arrivo sicuro, ecc.
+Protocollo FULL-DUPLEX, con Sliding Window garantisce la consegna affidabile (grazie a delle tecniche di sincronizzazione) ed e' un FLUSSO CONTINUO (simulato in realta' grazie ai buffer, ovvero in fase di tx invece che inviare singoli byte li raccolgo in un buffer e quando ho raggiunto una soglia invio e in fase di rx analogo).
+OGNI BYTE ha un SEQUENCE NUMBER. Posso settare la PRIORITA' ai vari pacchetti, cosa non fattibile a liv.3. Fa anche il CONTROLLO CHECKSUM (anche se lo si fa anche a liv.2)
+Creo un tubo logico tra i due estremi e avviene un flusso di comunicazione continua.
+l'HEADER sono 20B.
+E' STATEFUL (ovvero la socket tcp e' un'automa), si divide in 3 FASI: HANDSHAKE THREE-WAY "SASA" (per creare la connessione, prima pero' server fa ACCEPT() e client CONNECT()), DATA TRANSFER, CLOSING "FAFA" (per chiudere la connessione).
+Nell'HANDSHAKE ci sono 3 stati: (client) [CLOSED - SYN-SENT - ESTABLISHED]; (server) [LISTEN - SYN-RECEIVED - ESTABLISHED].
+ACK = #ultimo byte ricevuto in ordine (ovvero che prima di lui ho tutti e dopo ho un buco, non per forza coincide con l'ultimo byte ricevuto) + 1 (piu' precisamente sarebbe il NEXT BYTE EXPECTED).
+Ogni quanti byte raccolti nel buffer ne deve spedire? MSS, ovvero la dimensione massima di un segmento (in modo anche che non venga frammentato con ip) => MSS = MTU - (ipHeader (20) + tcpHeader (20)) => OGNI PACCHETTO HA OVERHEAD DI 40B.
+Pero' non sempre riusciamo a spedire quando raggiungiamo MSS dati nel buffer, infatti se si libera prima dello spazio nel ricevente potremmo mandare subito pacchetti piccoli (avendo molto overhead) => sindrome silly window.
+Percio' si utilizza ALGORITMO DI NAGLE: invio MSS byte (se ho ALMENO MSS byte nel buffer e se il ricevitore ha ALMENO MSS byte liberi), invio meno di MSS byte (se non ho almeno MSS byte nel buffer ma NON ho dati in giro), non invio se ci sono dei dati in giro non ancora Acknoledg-ati (ovvero LBA<LBS).
+Dato che TCP assicura che i messaggi arrivino, come setta il timeout entro cui aspettare un ACK? con ALGO di JACOBSON-KARELS.
+
+SLIDING WINDOW TCP:
+AVERTISED WINDOW (16bit)= MAXRCVBUFFER - ((NBE -1) - LASTBYTEREAD) => tolgo i dati che ho effettivamente gia' ricevuto in ordine ma NON ancora letto, infatti lui non conta i byte che ho gia' ricevuto se prima c'e' un buco. Conta fino a quelli ordinati. Ogni volta che faccio una read prelevo dal buffer (quindi prima di LBR non c'e' niente)
+EFFECTIVE WINDOW = ADV. WINDOW - (LASTBYTESENT - LASTBYTEACKED) => tolgo i dati che ho gia mandato ma non mi sono stati ancora confermati, quindi vuol dire che sono ancora in rete che viaggiano e occupano spazio.
+L'adv.window va a 16 bit in modo da evitare il WRAPAROUND, visto che il sequence number ha 32bit. Per sfruttare a pieno il canale l'adv.window = RTT*BANDWIDTH, ma essendo che al max adv.window = 64KB (essendo 2^16) uso lo SCALING FACTOR che mi permette di moltiplicare la adv.window per 2^14.
+
+Tecniche per RISOLVERE LA CONGESTIONE (perche tcp cerca di usufruire della rete aumentando sempre di piu' il carico fino a che non va in congestione, poi risolve):
+
+CONGESTION CONTROL TCP (tecniche per RISOLVERE LA CONGESTIONE, perche tcp cerca di usufruire della rete aumentando sempre di piu' il carico fino a che non va in congestione, poi risolve):
+Il calcolo dell'EFFECTIVE WINDOW viene modificato, E.W. = min(ADV.W., CONG.W.) - (LASTBYTESENT - LASTBYTEACKED) => una sorgente non puo' inviare piu' della componente piu' lenta (ovvero l'host destinatario o la rete).
+La adv.window viene inviata dal ricevitore, ma la cong.window da chi? (nessuno), infatti e' il trasmettitore che la calcola in base a quanto sente la rete "occupata" => diminuisce la cong.window se ha perdita di pacchetti, la aumenta se non ha perdita.
+Quando applico il FQ devo calcolare i tempi finali DIVISI PER GRUPPO, es. A1,A2,A3 e B1,B2 i tempi di A2=F(A1)+t(A2); A3=F(A2)+t(A3); B2=F(B1)+t(B2)
+
+La cong.window su cui calcolo è quella di INIZIO ROUND, infatti l'incremento che calcolo man mano viene aggiunto alla cwnd all'inizio del round successivo.
+ADDITTIVE INCREASE MULTIPLICATIVE DECREASE (AIMD BASE): 
+Assumendo di inviare cwnd bytes e che ogni ACK contenga MSS byte, durante ogni slot di tempo (RTT) t io calcolo la cwnd: cwnd(t)={cwnd(t-1)+a se no congestioni; cwnd(t-1)*b se congestion} con a=MSS*(k/cwnd(t-1)) dove k e' il numero di byte ackati e cwnd(t-1) quanti pacchetti ho inviato e b=0.5 (tipicamente). 
+La congestione viene rilevata quando scade un TIMEOUT prima che il pacchetto sia consegnato (ack) (IL TIMEOUT NON AVVIENE QUANDO NON ARRIVA IL PRIMO ACK, io posso continuare a spedire anche se non arrivano gli ack..fino al timeout. Io spedisco inizialmente cwnd byte e poi invio un mss ogni volta che arriva un ack).
+
+Ogni round: cwnd <- cwnd + 1mss (additive increase)
+Timeout: cwnd <- cwnd/2 (multiplicative decrease)
+inviando cwnd byte, ogni x byte ackati (1 ACK = 1MSS) abbiamo: increment <- x/cwnd * mss        
+                                                               cwnd <- cwnd + increment 
+quindi ogni round cwnd viene incrementato di esattamente 1mss se riceviamo tutti gli ack
+
+SLOW START (e' un miglioramento di AIMD):
+Ogni round: cwnd <- cwnd * 2 ogni round (fino a quando non ricevo il primo timeout, poi slow start solo dopo i timeout)
+Timeout: sshthresh <- cwnd/2, ovvero salvo in sshthresh il valore della finestra/2    
+         cwnd <- 1mss  e poi riporto la finestra a 1, successivamente faccio slow start fino a sshthresh poi addittivo, quindi fino a sshthresh fa *2 (ovvero +1 ad ogni ACK) e poi raggiunto sshthresh fa aumento lineare.
+
+FAST RETRANSMIT (miglioramento di slow start):
+Quando un pacchetto non arriva correttamente allora ricevo un ack con seqNum minore di quello che ho inviato.
+3 ack duplicati: (ritrasmetto il segmento prima che scada il timeout) sshthresh <- cwnd/2     
+                                                                      cwnd <- 1mss
+Timeout: cwnd <- 1mss e poi slow start fino a sshthresh.
+
+FAST RECOVERY:
+3 ack duplicati: riparto da sshtresh linearmente +3 => cwnd <- sshthresh + 3mss
+Timeout:  cwnd <- 1mss e poi slow start fino a sshthresh.
+
+Tecniche per EVITARE LA CONGESTIONE (poco usato. cerco di predirre quando sta per avvenire la congestione e rallento.):
+RED:
+Il router droppa dei pacchetti (non facendo quindi arrivare gli ack) in modo da forzare il trasmettitore a rallentare.
+Ogni volta che arriva un pacchetto, esso ha una probabilita' di essere scartato in base allo stato della coda.
+
+SICUREZZA:
+Asset: l'oggetto che dobbiamo proteggere. Il DOS e' facile da attuare con TCP, basta continuare ad inviare pacchetti SYN al server.
+Gli attacchi sono: ATTIVI (facili da rilevare, difficili da prevenire) e PASSIVI (difficili da rilevare, bisogna prevenirli).
+Modello di DOLEV-YAO: applicare trasformazioni ai messaggi che invio in modo che solo il ricevente e' in grado di decifrarli. (cosi mi accorgo degli attacchi attivi e prevengo quelli passivi) => per ogni livello dell'iso-osi implemento il canale dolev-yao, ovvero applico trasformazioni in ogni livello.
+Ad ogni livello cifro tutto tranne l'header di quel livello, altrimenti non e' possibile indirizzare. A livello 2 WPA2, a livello 3 si implementa con IPSec, a livello 4-5 si implementa con TLS-SSL (che e' una socket che cifra il payload), a livello 7 ci sono protocolli ad-hoc per le varie applicazioni (es. PGP per le mail).
+L'algoritmo di cifratura/de e' PUBBLICO e l'unica cosa SEGRETA e' la CHIAVE (se l'algo e' segreto non aumenta la robustezza del sistema!).
+SICUREZZA: INCONDIZIONATA (l'algo non e' violabile in quanto il testo cifrato NON fornisce abbastanza informazioni per dedurre il chiaro), COMPUTAZIONALE (il costo per rompere l'algoritmo e' superiore del valore del testo in chiaro)
+La cifratura e' SIMMETRICA o ASIMMETRICA.
+
+CRITTORGRAFIA SIMMETRICA:
+Il cifrario puo' essere : A FLUSSO (elaboro il messaggio BYTE a BYTE, e la chiave e' un FLUSSO generato da uno pseudo random generator. Cypher = flusso XOR messaggio), A BLOCCHI
+Nel cifrario a flusso la chiave deve essere lunga come il plaintext (es. RC4)
+Nel cifrario a blocco si considerano blocchi di dati di una misura FISSA, il concetto e' mappare tot bit in altri tot bit (piu' e' grande il blocco piu' e' resistente ad attacchi statistici).
+Un esempio a chiave SIMMETRICA, a BLOCCO e' AES con blocchi di 128bit e chiave 128-192-256bit.
+
+Ci sono varie modalita' di uso dei cifrari a blocco (al cui interno si usa un algoritmo di cifratura, tipo AES):
+ECB: considero il file come un insieme di blocchi indipendenti e ciascuno viene cifrato con la stessa chiave. Se ci sono delle ripetizioni del testo in chiaro (ovvero due blocchi uguali) queste si ripresentano nel testo cifrato. => facilmente intuibile. C_i = AES_k(Pi) dove k e' la chiave e aes e' l'algo usato
+CBC: considero il file come blocchi e ogni blocco precedentemente cifrato viene concatenato assieme al blocco contenente il plaintext. Tutti i blocchi sono DIPENDENTI e la modifica di un blocco influisce su tutti i SUCCESSIVI. Il primo blocco e' inizializzato con IV. C_0 = IV; C_i = AES_k(C_i-1 XOR P_i)
+OFB: considero il file come un flusso, anche se e' a blocchi. Genero un flusso pseudocasuale partendo da IV. O_0 = IV;  O_i = AES_k(O_i-1);   C_i = P_i XOR O_i. Il plaintext viene soltanto messo in xor, la chiave viene usata per creare il flusso. MAI RIUSARE (k,IV) uguali
+CTR: cifro un counter con l'algo (es. AES) e per ciascun blocco devo usare (key,counter) diversi. O_i = AES_k_i(i);     C_i = P_i XOR O_i.   A differenza di CBC,OFB non serve tenere in memoria il blocco precedente. MAI RIUSARE (k_i,i) uguali.
+
+AUTENTICAZIONE:
+autenticazione dei DATI (integrita) != autenticazione delle PARTI
+Posso attuarla:
+con la CRITTOGRAFIA SIMMETRICA, pero' non garantisco il NON RIPUDIO e non c'e' modo di distinguere A da B all'interno del messaggio (AUTENTICITA' DELLE PARTI) essendo che entrambi hanno la stessa chiave.
+
+con la HASH: creo un codice MAC in base ad una chiave ed un messaggio in chiaro Pi (MAC = f_hash(K + Pi)) e successivamente invio Pi + MAC (quindi il messaggio circola in chiaro, non garantisce confidenzialita'). 
+Il ricevente ricalcola MAC' = f_hash(K,Pi) e confronta se e' = MAC. => garantisce l'integrita' ma non la conf.
+La funzione di hash per un INPUT di DIMENSIONE VARIABILE ha OUTPUT di DIMENSIONE FISSA.
+
+Con una funzione di HASH(M,k; es.HMAC) io garantisco l'INTEGRITA (AUTENTICAZIONE DEI DATI, il pacchetto arriva intatto), 
+Con la CIFRATURA a CHIAVE PRIVATA io garantisco la CONFIDENZIALITA'(il pacchetto viaggia cifrato, non lo puoi leggere),
+Cifrando con la CHIAVE PUBBLICA del destinatario garantisco la AUTENTICAZIONE DELLE PARTI (solo lui puo' decifrarlo).
+In ogni caso con la crittografia simmetrica non posso garantire il non ripudio.
+
+WEP:
+Il WEP e' uno schemna di codifica a critt. SIMMETRICA implementato nelle reti 802.11
+La chiave (WEP key) viene scambiata attraverso un canale sicuro, es. a voce. Il payload e il CHECKSUM ICV (controllo integrita) sono cifrati con una variante di RC4.
+L'IV viene spedito (in chiaro) assieme al pacchetto.
+TX: (IV + WEP key) -> keystream che viene messo in XOR con (M_i, ICV_i). Ottengo cosi il payload cifrato.
+RX: Ottengo IV dal frame (dato che e' in chiaro), calcolo (IV + WEP) -> keystream e faccio keystream XOR C_i => ottengo (M_i, ICV_i).
+
+CRITTOGRAFIA ASIMMETRICA:
+Puo' garantire: CONFIDENZIALITA (cifro con la chiave PUBBLICA del DESTINATARIO, ma essendo lento di solito lo si usa per scambiare la chiave SIMMETRICA) -> INTEGRITA, AUTENTICAZIONE DELLE PARTI e NON RIPUDIO (con la FIRMA DIGITALE, ovvero cifrando con la chiave PRIVATA del MITTENTE).
+la chiave PUBBLICA e' usata per cifrare i messaggi e verificare le FIRME. la chiave PRIVATA e' usata per decifrare i messaggi e creare le firme.
+Nella CIFRATURA: il mittente cifra il messaggio con la chiave PUBBLICA del destinatario, in modo che solo lui possa leggerla.
+Nella FIRMA: il mittente verifica la sua identita cifrando il messaggio con la sua chiave PRIVATA (in realta essendo lungo il messaggio cifro solo l'hash), che solo lui conosce e tutti possono verificare che sia lui decifrando con la sua chiave PUBBLICA. Inoltre con la firma posso anche garantire l'INTEGRITA.
+Il TIMESTAMP lo inserisco quando FIRMO.
+Un' oggetto e' PUNTUALE se mandato assieme alla NONCE.
+
+RSA0:
+A:      calcolo p,q PRIMI e n = p*q
+        calcolo fi(n) = (p-1)(q-1)
+        calcolo e => 1 < e < fi(n) AND coprimi(e,fi(n))
+        la chiave PUBBLICA e' (e,n)
+        calcolo d => 0 <= d <= n AND d * e = 1 mod fi(n)
+        la chiave PRIVATA e' (d,n)
+
+Per cifrare => C_i = (P_i ^e) mod n
+Per decifrare => P_i = (C_i ^d) mod n
+
+Essendo che computa numeri molto grandi, RSA e' molto lento percio' si utilizza soltanto per lo scambio della chiave SIMMETRICA, poi tutto viene cifrato con quella.
+In realta' la firma viene fatta sul DIGEST, che ottengo con la hash.
+Le chiavi PUBBLICHE vengono distribuite tramite i CERTIFICATI, ovvero (Alice, PU_Alice) viene firmato con la PR_CA => CA e' un'entita' che certifica.
+All'interno del CERTIFICATO: [ID_A, ID_CA, timestamp, PU_A, FIRMA (digest cifrato con PR_CA)].
+
+SICUREZZA DELLE MAIL:
+PGP (de facto):
+    Scenario: A deve inviare una mail a B => A->B
+    Usato per garantire:
+    - AUTENTICAZIONE: A crea un DIGEST della mail(M) usando SHA-1, lo cifra con PR_A (cosi garantisce la sua identita) e ottiene una FIRMA f= E_PR_A(SHA-1(M)); invia a B [M,f]. 
+           B che lo riceve, decifra la firma f con la chiave pubblica di A => d = D_PU_A(f); successivamente si calcola d' = SHA-1(M) e vede se d = d'
+
+    - CONFIDENZIALITA: A crea una chiave di SESSIONE K (simmetrica, ovvero un blocco di 128 bit randomici) , successivamente cifra con quella chiave usando un algo (es. DES) => C1 = E_K(M).
+           A deve anche inviare la chiave di sessione (altrimenti B non decifra), quindi cifra la chiave di sessione con la chiave PUBBLICA di B usando un algo (es. RSA) => C2 = E_PU_B(K); invia a B [C1,C2]
+
+    Riassumendo:
+    cifrando con la chiave PRIVATA di A => firma digitale (AUTENTICAZIONE delle parti)
+    cifrando con la chiave di SESSIONE => CONFIDENZIALITA
+    cifrando con la chiave PUBBLICA di A => permetto di far arrivare a B la chiave di SESSIONE.
+
+S/MIME (de jure)
+
+DIFFIE HELLMAN:
+viene utilizzato per scambiarsi la chiave di sessione senza usare la crittografia ASIMMETRICA.
+A e B vogliono comunicare. Scelgono p,g (che sono PUBBLICI); 
+A (anche B) genera un numero xA < p (risp. xB < p).
+A (e B) computa R_A = (g^xA) mod p (analogamente R_B = (g^x_B) mod p) e invia a B in chiaro R_A (B invia R_B ad A).
+Ora la chiave di SESSIONE (calcolata da A, ma uguale per entrambi) e' K = (R_B)^xA mod p. (per B e' K = (R_A)^xB mod p)
+Questo scambio e' vulnerabile verso attacchi MAN IN THE MIDDLE perche i messaggi non sono autenticati (firmati).
+
+ATTACCO REPLAY (ovvero NON e' PUNTUALE => ovvero non c'e' nonce): sniffare un pacchetto e reinviarlo piu avanti facendolo salvare correttamente.
+HMAC (ovvero hash(dati + k) serve per autenticare e integrita)
+il NON RIPUDIO di A lo hai se A ha firmato con la sua chiave privata. 
+AUTENTICITA' dei DATI: ovvero che i dati sono integri e fatti da me, li firmo con la mia chiave privata o con HMAC (hash(M+K di sessione))
+AUTENTICAZIONE: di sessione, ovvero so io sono autenticato per chi riceve il messaggio: con una NONCE o con una terza parte fidata.
